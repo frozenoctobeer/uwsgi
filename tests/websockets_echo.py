@@ -3,6 +3,10 @@ import uwsgi
 import time
 
 
+def generate_big_string():
+    return ('a' * (2 ** 10)) * (2 ** 10)
+
+
 def application(env, sr):
 
     ws_scheme = 'ws'
@@ -41,14 +45,14 @@ def application(env, sr):
           </script>
      </head>
     <body>
-        <h1>WebSocket</h1>
+        <h1>WebSocket %s</h1>
         <input type="text" id="testo"/>
         <input type="button" value="invia" onClick="invia();"/>
     <div id="blackboard" style="width:640px;height:480px;background-color:black;color:white;border: solid 2px red;overflow:auto">
     </div>
     </body>
     </html>
-        """ % (ws_scheme, env['HTTP_HOST'])
+        """ % (ws_scheme, env['HTTP_HOST'], generate_big_string)
     elif env['PATH_INFO'] == '/foobar/':
         uwsgi.websocket_handshake(env['HTTP_SEC_WEBSOCKET_KEY'], env.get('HTTP_ORIGIN', ''))
         print "websockets..."
